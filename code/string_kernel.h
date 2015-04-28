@@ -120,9 +120,7 @@ k_type StringKernel<k_type>::kernel(const DataElement &x, const DataElement &y) 
     }
   }
 
-  // Dynamic programming
-  // Initialize the two two-dimensional Kd-arrays
-  // [one for the current i (i%2), one for i-1 ((i+1)%2) ]
+  /** Dynamic programming */
   for (int i = 0; i < 2; i++)
   {
     for (int j = 0; j < (x.length + 1); j++)
@@ -130,19 +128,16 @@ k_type StringKernel<k_type>::kernel(const DataElement &x, const DataElement &y) 
       for (int k = 0; k < (y.length + 1); k++)
       {
         Kd[i][j][k] = (i + 1) % 2;
-        // we start with i==1, i.e. K'_i-1(.,.)==1.
-        //        If we increase i to 2, we switch
       }
     }
   }
 
-  // Calculate all the Kd and Kdd
+  /** Calculate Kd and Kdd */
   for (int i = 1; i <= (_kn - 1); i++)
   {
-    // Set the Kd's to nought for those lengths of s and t
-    // where s (or t) has exactly length i-1 and t (or s)
-    // has length >=i-1  this part of the matrix has the shape
-    // of a capital letter L upside down
+    /** Set the Kd to zero for those lengths of s and t
+    where s (or t) has exactly length i-1 and t (or s)
+    has length >= i-1. L-shaped upside down matrix */
     for (int j = (i - 1); j <= (x.length - 1); j++)
     {
       Kd[i % 2][j][i - 1] = 0;
@@ -170,7 +165,7 @@ k_type StringKernel<k_type>::kernel(const DataElement &x, const DataElement &y) 
     }
   }
 
-  // Calculation of K
+  /** Calculate K */
   k_type sum = 0;
   for (int i = _kn; i <= x.length; i++)
   {
@@ -178,13 +173,12 @@ k_type StringKernel<k_type>::kernel(const DataElement &x, const DataElement &y) 
     {
       if (x.attributes[((i)) - 1] == y.attributes[((j)) - 1])
       {
-        // ((.))-1 is because indices start with 0 (not with 1)
         sum += _lambda * _lambda * Kd[(_kn - 1) % 2][i - 1][j - 1];
       }
     }
   }
 
-  // Delete
+  /** Delete */
   for (int j = 0; j < 2; j++)
   {
     for (int i = 0; i < x.length + 1; i++)
@@ -229,18 +223,18 @@ void StringKernel<k_type>::compute_kernel()
 {
   assert(_string_data);
 
-  // Initialize kernel, array of floats
+  /** Initialize kernel */
   _kernel = new k_type *[_string_data->size()];
   for (size_t i = 0; i < _string_data->size(); i++)
     _kernel[i] = new k_type[_string_data->size()];
 
-  // start with all K filled with -1's, then only calculate kernels as needed
+  /** Start with all K filled with -1, then only calculate kernels as needed */
   for (size_t i = 0; i < _string_data->size(); i++)
     for (size_t j = 0; j < _string_data->size(); j++)
       _kernel[i][j] = -1;
 
 
-  // get values for normalization, it is computed for elements in diagonal
+  /** Get values for normalization, it is computed for elements in diagonal */
   std::vector<k_type> norms(_string_data->size());
   if (_normalize)
   {
@@ -252,7 +246,7 @@ void StringKernel<k_type>::compute_kernel()
     }
   }
 
-  // Compute kernel using dynamic programming
+  /** Compute kernel using dynamic programming */
   run_kernel_dp(norms, _kernel);
 }
 

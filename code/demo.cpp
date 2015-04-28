@@ -69,7 +69,7 @@ int main(int argc, char **argv) {
   }
   string kernel_file(argv[1]);
 
-  // Kernel parameters
+  /** Kernel parameters */
   const float c = 1e12;
   const int normalize = 1;
   const int symbol_size = 255;  // A size of an alphabet
@@ -77,26 +77,26 @@ int main(int argc, char **argv) {
   int kn = 2;                   // A level of susbsequence matching
   double lambda = 0.5;          // A decay factor
 
-  // Prepare dummy data
+  /** Prepare dummy data */
   vector<string> dummy_data;
   dummy_data.push_back("The idea behind digital computers may be explained by saying that these machines are intended to carry out any operations which could be done by a human. Alan Turing."); // An original quote from Alan Turing
   dummy_data.push_back("The idea may be explained by saying that these intelligent machines are intended to carry out all tasks which could be done by a human."); // A changed sentence
   dummy_data.push_back("ACAGCTAGCTAGCAAGCTAGCTAGC"); // An example of a DNA sequence 
-  dummy_data.push_back("TAGTAGCTAAAGCTAGCTTTA"); 
+  dummy_data.push_back("TAGTAGCTAAAAAAGCTAGCTTTA");
 
-  // Prepare labels for dummy data
+  /** Prepare labels for dummy data */
   vector<int> dummy_labels;
   dummy_labels.push_back(1);
   dummy_labels.push_back(1);
   dummy_labels.push_back(-1);
   dummy_labels.push_back(-1);
 
-  // Main computations
+  /** Main computations */
   StringKernel<float> string_kernel(c, normalize, symbol_size, max_length, kn, lambda);
   string_kernel.set_data(dummy_data);
   string_kernel.compute_kernel();
 
-  // Save kernel to file
+  /** Save kernel to file */
   if (write_libsvm_kernel(kernel_file, dummy_labels, string_kernel))
     std::cout << "Kernel saved in the libsvm format to: " << kernel_file << std::endl;
   else
