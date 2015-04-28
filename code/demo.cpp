@@ -81,8 +81,8 @@ int main(int argc, char **argv) {
   vector<string> dummy_data;
   dummy_data.push_back("The idea behind digital computers may be explained by saying that these machines are intended to carry out any operations which could be done by a human. Alan Turing."); // An original quote from Alan Turing
   dummy_data.push_back("The idea may be explained by saying that these intelligent machines are intended to carry out all tasks which could be done by a human."); // A changed sentence
-  dummy_data.push_back("AAGCTAGCTAGCAAGCTAGCTAGC"); // An example of a DNA sequence 
-  dummy_data.push_back("TAGTAGCTAAAGCTAGCTTTA");
+  dummy_data.push_back("ACAGCTAGCTAGCAAGCTAGCTAGC"); // An example of a DNA sequence 
+  dummy_data.push_back("TAGTAGCTAAAGCTAGCTTTA"); 
 
   // Prepare labels for dummy data
   vector<int> dummy_labels;
