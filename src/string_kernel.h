@@ -16,9 +16,8 @@
 *     copyright notice, this list of conditions and the following
 *     disclaimer in the documentation and/or other materials provided
 *     with the distribution.
-*   * Neither the name of Willow Garage, Inc. nor the names of its
-*     contributors may be used to endorse or promote products derived
-*     from this software without specific prior written permission.
+*   * The name of contributors may not be used to endorse or promote products 
+*     derived from this software without specific prior written permission.
 *
 *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 *  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -120,7 +119,7 @@ k_type StringKernel<k_type>::kernel(const DataElement &x, const DataElement &y) 
     }
   }
 
-  /** Dynamic programming */
+  // Dynamic programming 
   for (int i = 0; i < 2; i++)
   {
     for (int j = 0; j < (x.length + 1); j++)
@@ -132,10 +131,10 @@ k_type StringKernel<k_type>::kernel(const DataElement &x, const DataElement &y) 
     }
   }
 
-  /** Calculate Kd and Kdd */
+  // Calculate Kd and Kdd 
   for (int i = 1; i <= (_kn - 1); i++)
   {
-    /** Set the Kd to zero for those lengths of s and t
+    /* Set the Kd to zero for those lengths of s and t
     where s (or t) has exactly length i-1 and t (or s)
     has length >= i-1. L-shaped upside down matrix */
     for (int j = (i - 1); j <= (x.length - 1); j++)
@@ -165,7 +164,7 @@ k_type StringKernel<k_type>::kernel(const DataElement &x, const DataElement &y) 
     }
   }
 
-  /** Calculate K */
+  // Calculate K 
   k_type sum = 0;
   for (int i = _kn; i <= x.length; i++)
   {
@@ -178,7 +177,7 @@ k_type StringKernel<k_type>::kernel(const DataElement &x, const DataElement &y) 
     }
   }
 
-  /** Delete */
+  // Delete 
   for (int j = 0; j < 2; j++)
   {
     for (int i = 0; i < x.length + 1; i++)
@@ -223,18 +222,18 @@ void StringKernel<k_type>::compute_kernel()
 {
   assert(_string_data);
 
-  /** Initialize kernel */
+  // Initialize kernel 
   _kernel = new k_type *[_string_data->size()];
   for (size_t i = 0; i < _string_data->size(); i++)
     _kernel[i] = new k_type[_string_data->size()];
 
-  /** Start with all K filled with -1, then only calculate kernels as needed */
+  // Start with all K filled with -1, then only calculate kernels as needed 
   for (size_t i = 0; i < _string_data->size(); i++)
     for (size_t j = 0; j < _string_data->size(); j++)
       _kernel[i][j] = -1;
 
 
-  /** Get values for normalization, it is computed for elements in diagonal */
+  // Get values for normalization, it is computed for elements in diagonal 
   std::vector<k_type> norms(_string_data->size());
   if (_normalize)
   {
@@ -246,7 +245,7 @@ void StringKernel<k_type>::compute_kernel()
     }
   }
 
-  /** Compute kernel using dynamic programming */
+  // Compute kernel using dynamic programming 
   run_kernel_dp(norms, _kernel);
 }
 
